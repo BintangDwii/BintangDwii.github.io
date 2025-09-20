@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stars Hotel · Luxury Hotel</title>
+
+    <!--
+      ✅ Tech stack
+      - HTML + Tailwind (CDN) + Vanilla JS
+      - One file for easy copy/paste & learning
+      - Clear structure, consistent naming, DRY classes
+
+      🧭 Page outline
+      1) Header / Navigation (sticky)
+      2) Hero with quick search
+      3) Main content (Overview, Rooms, Dining, Spa, Meetings)
+      4) Exclusive Offers (fixed flexible grid)
+      5) Gallery & Location
+      6) Booking Engine
+      7) Brand content
+      8) Footer
+    -->
+
+    <!-- Tailwind CDN + on-the-fly config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50:  '#eff6ff', 100:'#dbeafe', 200:'#bfdbfe', 300:'#93c5fd',
+                400:'#60a5fa', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8',
+                800:'#1e40af', 900:'#1e3a8a'
+              },
+            },
+            boxShadow: {
+              soft: '0 10px 25px -10px rgba(0,0,0,0.25)'
+            },
+            animation: { fadeInUp: 'fadeInUp 600ms ease-out both' },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: 0, transform: 'translateY(16px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' }
+              }
+            }
+          }
+        }
+      };
+    </script>
+  </head>
+
+  <body class="bg-white text-gray-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+    <!-- Skip link -->
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-brand-500 focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+
+    <!-- HEADER / NAV -->
+    <header class="fixed inset-x-0 top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-neutral-900/70 bg-white/80 dark:bg-neutral-900/80 shadow-soft">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- Brand -->
+          <a href="#" class="flex items-center gap-2 group" aria-label="Go to homepage">
+            <h6 class="font-serif tracking-wide text-xl bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-all">✨ Stars Hotel</h6>
+          </a>
+
+          <!-- Actions -->
+          <div class="flex items-center gap-3">
+            <button id="themeToggle" class="hidden sm:inline-flex items-center gap-2 rounded-lg border border-gray-200 dark:border-neutral-700 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-neutral-800 transition transform hover:scale-105 active:scale-95" aria-label="Toggle dark mode">
+              <span>🌗</span><span class="hidden md:inline">Theme</span>
+            </button>
+            <a href="#signin" class="hidden sm:inline-flex items-center gap-2 rounded-lg border border-gray-200 dark:border-neutral-700 px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-neutral-800 transition transform hover:scale-105 active:scale-95 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-brand-600 hover:after:w-full after:transition-all after:duration-500" aria-label="Sign in or join">🔑 <span class="hidden md:inline">Sign In / Join</span></a>
+            <a href="#booking" class="inline-flex gap-2 items-center justify-center px-3 py-2 rounded-xl font-medium text-white shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 active:scale-95 duration-300 transition transform hover:scale-[1.05]" aria-label="Book now">📅 <span class="hidden md:inline">Book Now</span></a>
+            <button id="mobileMenuBtn" class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800 transition transform hover:scale-110 active:scale-95" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile drawer -->
+      <div id="mobileNav" class="hidden border-t border-gray-200 dark:border-neutral-800" role="dialog" aria-modal="true">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Mobile Primary">
+          <ul class="grid gap-2">
+            <!-- Larger tap targets -->
+            <li><a class="block rounded-lg px-4 py-3 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#hotels">Hotels</a></li>
+            <li><a class="block rounded-lg px-4 py-3 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#offers">Offers</a></li>
+            <li><a class="block rounded-lg px-4 py-3 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#dining">Dining</a></li>
+            <li><a class="block rounded-lg px-4 py-3 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#meetings">Meetings & Events</a></li>
+            <li><a class="block rounded-lg px-4 py-3 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#spa">Spa & Wellness</a></li>
+            <li><a class="block rounded-lg px-4 py-3 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#about">About Us</a></li>
+            <li class="h-px bg-gray-200 dark:bg-neutral-800 my-2"></li>
+            <li>
+              <a href="#signin" class="block rounded-lg border border-gray-200 dark:border-neutral-700 px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-neutral-800 transition relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-brand-600 hover:after:w-full after:transition-all after:duration-700" aria-label="Sign in or join">🔑 Sign In / Join</a>
+            </li>
+            <li><a class="block rounded-lg px-4 py-3 bg-brand-600 text-white hover:bg-brand-700 transition" href="#booking">📅 Book Now</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="hero" class="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden">
+     <!-- Background image hotel -->
+<div class="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+     style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+</div>
+
+<!-- Overlay gelap -->
+<div class="absolute inset-0 -z-10 pointer-events-none">
+  <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(65%_65%_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_100%)]"></div>
+</div>
+
+
+      <!-- Content -->
+      <div class="relative z-10 text-center text-white px-4">
+        <h1 class="font-serif tracking-wide text-5xl sm:text-6xl lg:text-7xl mb-6 bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600 bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]">✨ Stars Hotel</h1>
+        <p class="text-white/80 text-lg sm:text-xl mb-8">Experience timeless elegance and world-class hospitality.</p>
+        <button id="toggleFormBtn" class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 active:scale-95 duration-300 transition transform hover:scale-[1.05]">Book Now</button>
+
+        <!-- Hidden quick booking card -->
+        <div id="bookingCard" class="hidden mt-8 max-w-4xl mx-auto bg-white/10 backdrop-blur-xl rounded-2xl p-6 lg:p-8 text-left text-gray-900 ring-1 ring-white/20 shadow-2xl">
+          <form class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="md:col-span-2">
+              <label for="qs-location" class="block text-sm font-medium text-white/90">Location</label>
+              <select id="qs-location" name="location" class="mt-1 w-full rounded-xl border border-white/20 bg-white/70 focus:border-brand-500 focus:ring-brand-500 p-2.5">
+                <option value="jakarta">Jakarta</option>
+                <option value="bali">Bali</option>
+                <option value="singapore">Singapore</option>
+                <option value="dubai">Dubai</option>
+                <option value="vienna">Vienna</option>
+              </select>
+            </div>
+            <div>
+              <label for="qs-checkin" class="block text-sm font-medium text-white/90">Check-in</label>
+              <input id="qs-checkin" name="checkin" type="date" class="mt-1 w-full rounded-xl border border-white/20 bg-white/70 focus:border-brand-500 focus:ring-brand-500 p-2.5" />
+            </div>
+            <div>
+              <label for="qs-checkout" class="block text-sm font-medium text-white/90">Check-out</label>
+              <input id="qs-checkout" name="checkout" type="date" class="mt-1 w-full rounded-xl border border-white/20 bg-white/70 focus:border-brand-500 focus:ring-brand-500 p-2.5" />
+            </div>
+            <div>
+              <label for="qs-guests" class="block text-sm font-medium text-white/90">Guests</label>
+              <select id="qs-guests" name="guests" class="mt-1 w-full rounded-xl border border-white/20 bg-white/70 focus:border-brand-500 focus:ring-brand-500 p-2.5">
+                <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5+</option>
+              </select>
+            </div>
+            <div class="md:col-span-5 flex justify-center">
+              <button type="submit" class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-medium text-white shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 active:scale-95 duration-300 transition transform hover:scale-[1.05]">Search Availability</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main id="main" class="mt-10 sm:mt-16">
+      <!-- OVERVIEW -->
+      <section id="hotels" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <h2 class="font-serif text-3xl sm:text-4xl mb-4">Hotel Indonesia Stars Hotel Jakarta</h2>
+              <p class="text-gray-600 dark:text-neutral-300 leading-relaxed">Experience the heartbeat of Jakarta with legendary hospitality, exquisite rooms and suites, and curated dining experiences overlooking the iconic Bundaran HI.</p>
+              <div class="mt-6 flex flex-wrap gap-3">
+                <a href="#booking" class="rounded-lg bg-brand-600 text-white px-5 py-2 hover:bg-brand-700">Book a Stay</a>
+                <a href="#gallery" class="rounded-lg border border-gray-200 dark:border-neutral-700 px-5 py-2 hover:bg-gray-50 dark:hover:bg-neutral-800">View Gallery</a>
+              </div>
+            </div>
+            <div class="aspect-[16/10] overflow-hidden rounded-2xl shadow-soft">
+              <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600&auto=format&fit=crop" alt="City-view suite at dusk" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOMS & SUITES -->
+      <section id="rooms" class="py-16 bg-gray-50 dark:bg-neutral-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-end justify-between gap-4 mb-8">
+            <div>
+              <h3 class="font-serif text-2xl sm:text-3xl">Rooms & Suites</h3>
+              <p class="text-gray-600 dark:text-neutral-300">Refined comfort with contemporary design.</p>
+            </div>
+            <a href="#booking" class="inline-flex items-center gap-2 rounded-lg border border-gray-200 dark:border-neutral-700 px-4 py-2 hover:bg-gray-50 dark:hover:bg-neutral-800 transition">Check Rates →</a>
+          </div>
+
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Deluxe Room -->
+            <article class="group relative rounded-2xl overflow-hidden bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-soft transition hover:shadow-xl hover:-translate-y-1 focus-within:shadow-xl focus-within:-translate-y-1">
+              <span class="absolute z-10 top-3 left-3 rounded-full bg-black/60 text-white text-xs px-3 py-1">Best Value</span>
+              <div class="relative">
+               <img class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1520256862855-398228c41684?q=80&w=1600&auto=format&fit=crop" alt="Executive suite" />
+             
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+              </div>
+              <div class="p-5">
+                <div class="flex items-center justify-between"><h4 class="font-medium text-lg">Deluxe Room</h4><div class="text-amber-500 text-sm" aria-label="4.6 out of 5">★★★★☆</div></div>
+                <p class="text-gray-600 dark:text-neutral-300 mt-1">King bed · City view · 40 m²</p>
+                <div class="mt-3 flex flex-wrap gap-2 text-xs text-gray-700 dark:text-neutral-300">
+                  <span class="rounded-full bg-gray-100 dark:bg-neutral-800 px-2 py-1">Breakfast option</span>
+                  <span class="rounded-full bg-gray-100 dark:bg-neutral-800 px-2 py-1">Free Wi‑Fi</span>
+                </div>
+                <div class="mt-4 flex items-end justify-between">
+                  <p class="font-semibold"><span class="text-sm text-gray-500 dark:text-neutral-400">From</span><span class="ml-1">IDR 2,200,000</span></p>
+                  <button class="inline-flex items-center justify-center px-4 py-2 rounded-xl font-medium text-white shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 active:scale-95 duration-300 transition transform hover:scale-[1.05]" data-room="Deluxe Room" data-upsell>Book</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Executive Suite -->
+            <article class="group relative rounded-2xl overflow-hidden bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-soft transition hover:shadow-xl hover:-translate-y-1 focus-within:shadow-xl focus-within:-translate-y-1">
+              <span class="absolute z-10 top-3 left-3 rounded-full bg-black/60 text-white text-xs px-3 py-1">Lounge Access</span>
+              <div class="relative">
+                <img class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1520256862855-398228c41684?q=80&w=1600&auto=format&fit=crop" alt="Executive suite" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+              </div>
+              <div class="p-5">
+                <div class="flex items-center justify-between"><h4 class="font-medium text-lg">Executive Suite</h4><div class="text-amber-500 text-sm" aria-label="4.8 out of 5">★★★★★</div></div>
+                <p class="text-gray-600 dark:text-neutral-300 mt-1">King bed · Lounge access · 60 m²</p>
+                <div class="mt-3 flex flex-wrap gap-2 text-xs text-gray-700 dark:text-neutral-300">
+                  <span class="rounded-full bg-gray-100 dark:bg-neutral-800 px-2 py-1">Late check‑out</span>
+                  <span class="rounded-full bg-gray-100 dark:bg-neutral-800 px-2 py-1">Welcome drink</span>
+                </div>
+                <div class="mt-4 flex items-end justify-between">
+                  <p class="font-semibold"><span class="text-sm text-gray-500 dark:text-neutral-400">From</span><span class="ml-1">IDR 3,900,000</span></p>
+                  <button class="inline-flex items-center justify-center px-4 py-2 rounded-xl font-medium text-white shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 active:scale-95 duration-300 transition transform hover:scale-[1.05]" data-room="Executive Suite" data-upsell>Book</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Presidential Suite -->
+            <article class="group relative rounded-2xl overflow-hidden bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-soft transition hover:shadow-xl hover:-translate-y-1 focus-within:shadow-xl focus-within:-translate-y-1">
+              <span class="absolute z-10 top-3 left-3 rounded-full bg-black/60 text-white text-xs px-3 py-1">Signature</span>
+              <div class="relative">
+                <img class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=1600&auto=format&fit=crop" alt="Presidential suite" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+              </div>
+              <div class="p-5">
+                <div class="flex items-center justify-between"><h4 class="font-medium text-lg">Presidential Suite</h4><div class="text-amber-500 text-sm" aria-label="5 out of 5">★★★★★</div></div>
+                <p class="text-gray-600 dark:text-neutral-300 mt-1">2 bedrooms · Butler service · 180 m²</p>
+                <div class="mt-3 flex flex-wrap gap-2 text-xs text-gray-700 dark:text-neutral-300">
+                  <span class="rounded-full bg-gray-100 dark:bg-neutral-800 px-2 py-1">Butler</span>
+                  <span class="rounded-full bg-gray-100 dark:bg-neutral-800 px-2 py-1">Airport transfer</span>
+                </div>
+                <div class="mt-4 flex items-end justify-between">
+                  <p class="font-semibold"><span class="text-sm text-gray-500 dark:text-neutral-400">From</span><span class="ml-1">IDR 18,000,000</span></p>
+                  <button class="inline-flex items-center justify-center px-4 py-2 rounded-xl font-medium text-white shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 active:scale-95 duration-300 transition transform hover:scale-[1.05]" data-room="Presidential Suite" data-upsell>Book</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- DINING -->
+      <section id="dining" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-end justify-between gap-4 mb-8">
+            <div>
+              <h3 class="font-serif text-2xl sm:text-3xl">Dining</h3>
+              <p class="text-gray-600 dark:text-neutral-300">Restaurants, bars, and lounges curated for every moment.</p>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-3 gap-6">
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800"><img class="h-44 w-full object-cover" src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop" alt="Fine dining" /><div class="p-5"><h4 class="font-medium text-lg">Skyline Grill</h4><p class="text-gray-600 dark:text-neutral-300">Steak & seafood • 5:30 PM – 11:00 PM</p></div></article>
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800"><img class="h-44 w-full object-cover" src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop" alt="Fine dining" /><div class="p-5"><h4 class="font-medium text-lg">The Lobby Lounge</h4><p class="text-gray-600 dark:text-neutral-300">Afternoon tea & cocktails • 10:00 AM – 12:00 AM</p></div></article>
+           <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800"><img class="h-44 w-full object-cover" src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop" alt="Fine dining" /><div class="p-5"><h4 class="font-medium text-lg">Artisan Café</h4><p class="text-gray-600 dark:text-neutral-300">Breakfast & pastries • 6:30 AM – 8:00 PM</p></div></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SPA & WELLNESS -->
+      <section id="spa" class="py-16 bg-gray-50 dark:bg-neutral-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div class="order-2 lg:order-1">
+              <h3 class="font-serif text-2xl sm:text-3xl">Spa & Wellness</h3>
+              <p class="text-gray-600 dark:text-neutral-300 mt-2">Holistic treatments, fitness studio, and a tranquil pool for urban rejuvenation.</p>
+              <ul class="mt-6 grid grid-cols-2 gap-3 text-sm">
+                <li>• Signature massages</li><li>• Sauna & steam</li><li>• Gym (24/7)</li><li>• Yoga sessions</li>
+              </ul>
+            </div>
+            <div class="order-1 lg:order-2 aspect-[16/10] overflow-hidden rounded-2xl shadow-soft"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1600&auto=format&fit=crop" alt="Spa pool" /></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MEETINGS & EVENTS -->
+      <section id="meetings" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-end justify-between gap-4 mb-8">
+            <div>
+              <h3 class="font-serif text-2xl sm:text-3xl">Meetings & Events</h3>
+              <p class="text-gray-600 dark:text-neutral-300">Ballrooms, boardrooms, and flawless celebrations.</p>
+            </div>
+            <a href="#contact" class="inline-flex items-center gap-2 rounded-lg border border-gray-200 dark:border-neutral-700 px-4 py-2 hover:bg-gray-50 dark:hover:bg-neutral-800">Plan an Event →</a>
+          </div>
+          <div class="grid md:grid-cols-3 gap-6">
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800"><img class="h-44 w-full object-cover" src="https://images.unsplash.com/photo-1503428593586-e225b39bddfe?q=80&w=1600&auto=format&fit=crop" alt="Grand ballroom" /><div class="p-5"><h4 class="font-medium text-lg">Grand Ballroom</h4><p class="text-gray-600 dark:text-neutral-300">Up to 1,000 guests • Ideal for weddings & galas</p></div></article>
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800"><img class="h-44 w-full object-cover" src="https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=1600&auto=format&fit=crop" alt="Meeting room" /><div class="p-5"><h4 class="font-medium text-lg">Executive Boardroom</h4><p class="text-gray-600 dark:text-neutral-300">12–18 guests • Premium AV & catering</p></div></article>
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800"><img class="h-44 w-full object-cover" src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1600&auto=format&fit=crop" alt="Banquet hall" /><div class="p-5"><h4 class="font-medium text-lg">Banquet Hall</h4><p class="text-gray-600 dark:text-neutral-300">200–400 guests • Flexible seating layouts</p></div></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXCLUSIVE OFFERS (fixed flexible grid) -->
+      <section id="offers" class="py-16 bg-gray-50 dark:bg-neutral-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-end justify-between gap-4 mb-8">
+            <div>
+              <h3 class="font-serif text-2xl sm:text-3xl">Exclusive Offers</h3>
+              <p class="text-gray-600 dark:text-neutral-300">Enhance your stay with curated packages.</p>
+            </div>
+          </div>
+
+          <!--
+            Grid rules:
+            - 1 col on small screens
+            - 2 cols on >=640px
+            - 3 cols on >=1024px
+            - Safe gaps and consistent card structure
+          -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Suite Escape -->
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-soft">
+              <div class="p-5">
+                <h4 class="font-medium text-lg">Suite Escape</h4>
+                <p class="text-gray-600 dark:text-neutral-300">Enjoy 15% off suites plus lounge access.</p>
+                <button class="mt-4 rounded-lg bg-brand-600 text-white px-4 py-2 hover:bg-brand-700" data-offer="Suite Escape" data-upsell>Redeem</button>
+              </div>
+            </article>
+
+            <!-- Gourmet Getaway -->
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-soft">
+              <div class="p-5">
+                <h4 class="font-medium text-lg">Gourmet Getaway</h4>
+                <p class="text-gray-600 dark:text-neutral-300">Breakfast for two + dinner credit.</p>
+                <button class="mt-4 rounded-lg bg-brand-600 text-white px-4 py-2 hover:bg-brand-700" data-offer="Gourmet Getaway" data-upsell>Redeem</button>
+              </div>
+            </article>
+
+            <!-- Wellness Retreat -->
+            <article class="rounded-2xl overflow-hidden border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-soft">
+              <div class="p-5">
+                <h4 class="font-medium text-lg">Wellness Retreat</h4>
+                <p class="text-gray-600 dark:text-neutral-300">Daily spa credit with flexible check‑out.</p>
+                <button class="mt-4 rounded-lg bg-brand-600 text-white px-4 py-2 hover:bg-brand-700" data-offer="Wellness Retreat" data-upsell>Redeem</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section id="gallery" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 class="font-serif text-2xl sm:text-3xl mb-6">Gallery</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <button class="group relative aspect-[4/3] overflow-hidden rounded-xl" data-lightbox data-large="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=1600&auto=format&fit=crop" aria-label="Open photo"><img class="h-full w-full object-cover group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=600&auto=format&fit=crop" alt="Lobby" /><span class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></span></button>
+            <button class="group relative aspect-[4/3] overflow-hidden rounded-xl" data-lightbox data-large="https://images.unsplash.com/photo-1511914265872-c4067258caf5?q=80&w=1600&auto=format&fit=crop" aria-label="Open photo"><img class="h-full w-full object-cover group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1511914265872-c4067258caf5?q=80&w=600&auto=format&fit=crop" alt="Suite" /><span class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></span></button>
+            <button class="group relative aspect-[4/3] overflow-hidden rounded-xl" data-lightbox data-large="https://images.unsplash.com/photo-1496395031280-4201b0f1e43d?q=80&w=1600&auto=format&fit=crop" aria-label="Open photo"><img class="h-full w-full object-cover group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1496395031280-4201b0f1e43d?q=80&w=600&auto=format&fit=crop" alt="Dining" /><span class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></span></button>
+            <button class="group relative aspect-[4/3] overflow-hidden rounded-xl" data-lightbox data-large="https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?q=80&w=1600&auto=format&fit=crop" aria-label="Open photo"><img class="h-full w-full object-cover group-hover:scale-105 transition" src="https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?q=80&w=600&auto=format&fit=crop" alt="Pool" /><span class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOCATION -->
+      <section id="location" class="py-16 bg-gray-50 dark:bg-neutral-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 class="font-serif text-2xl sm:text-3xl mb-6">Location</h3>
+          <div class="grid lg:grid-cols-2 gap-6 items-start">
+            <div>
+              <p class="text-gray-600 dark:text-neutral-300">Jl. M.H. Thamrin No. 1, Jakarta 10310 • Indonesia</p>
+              <p class="text-gray-600 dark:text-neutral-300 mt-2">Directly at the famous Bundaran HI, with easy access to shopping, business, and cultural landmarks.</p>
+              <a href="https://www.openstreetmap.org" target="_blank" class="inline-block mt-4 rounded-lg border border-gray-200 dark:border-neutral-700 px-4 py-2 hover:bg-gray-50 dark:hover:bg-neutral-800">Get Directions</a>
+            </div>
+            <div class="aspect-[16/10] overflow-hidden rounded-2xl border border-gray-200 dark:border-neutral-800">
+              <iframe title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=106.816, -6.2, 106.82, -6.16&layer=mapnik" class="h-full w-full"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOOKING ENGINE -->
+      <section id="booking" class="py-16">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 class="font-serif text-2xl sm:text-3xl mb-6 text-center">Book Your Stay</h3>
+          <form id="bookingForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-2xl p-6 shadow-soft">
+            <div class="sm:col-span-2">
+              <label for="bk-location" class="block text-sm font-medium">Location</label>
+              <select id="bk-location" name="location" class="mt-1 w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500">
+                <option>Jakarta</option><option>Bali</option><option>Singapore</option><option>Dubai</option><option>Vienna</option>
+              </select>
+            </div>
+            <div>
+              <label for="bk-checkin" class="block text-sm font-medium">Check‑in</label>
+              <input id="bk-checkin" name="checkin" type="date" class="mt-1 w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500" required />
+            </div>
+            <div>
+              <label for="bk-checkout" class="block text-sm font-medium">Check‑out</label>
+              <input id="bk-checkout" name="checkout" type="date" class="mt-1 w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500" required />
+            </div>
+            <div>
+              <label for="bk-rooms" class="block text-sm font-medium">Rooms</label>
+              <select id="bk-rooms" name="rooms" class="mt-1 w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+            </div>
+            <div>
+              <label for="bk-guests" class="block text-sm font-medium">Guests</label>
+              <select id="bk-guests" name="guests" class="mt-1 w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5+</option></select>
+            </div>
+            <div class="sm:col-span-2"><button type="submit" class="w-full rounded-xl bg-brand-600 text-white px-6 py-3 font-medium hover:bg-brand-700">Search & Continue</button></div>
+            <p id="bookingHelp" class="sm:col-span-2 text-sm text-gray-600 dark:text-neutral-300">We’ll show available rooms and suggest upgrades where it makes sense.</p>
+          </form>
+        </div>
+      </section>
+
+      <!-- BRAND CONTENT -->
+      <section id="about" class="py-16 bg-gray-50 dark:bg-neutral-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 class="font-serif text-2xl sm:text-3xl mb-8">Our World</h3>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <a class="group rounded-2xl border border-gray-200 dark:border-neutral-800 p-5 bg-white dark:bg-neutral-900 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#sustainability"><div class="flex items-center justify-between"><h4 class="font-medium text-lg">Sustainability</h4><span class="group-hover:translate-x-1 transition">→</span></div><p class="text-sm text-gray-600 dark:text-neutral-300 mt-2">Our commitment to responsible luxury.</p></a>
+            <a class="group rounded-2xl border border-gray-200 dark:border-neutral-800 p-5 bg-white dark:bg-neutral-900 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#heritage"><div class="flex items-center justify-between"><h4 class="font-medium text-lg">About Stars Hotel</h4><span class="group-hover:translate-x-1 transition">→</span></div><p class="text-sm text-gray-600 dark:text-neutral-300 mt-2">A heritage of hospitality since 1897.</p></a>
+            <a class="group rounded-2xl border border-gray-200 dark:border-neutral-800 p-5 bg-white dark:bg-neutral-900 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#careers"><div class="flex items-center justify-between"><h4 class="font-medium text-lg">Careers</h4><span class="group-hover:translate-x-1 transition">→</span></div><p class="text-sm text-gray-600 dark:text-neutral-300 mt-2">Grow your career with a global brand.</p></a>
+            <a class="group rounded-2xl border border-gray-200 dark:border-neutral-800 p-5 bg-white dark:bg-neutral-900 hover:bg-gray-50 dark:hover:bg-neutral-800 transition" href="#press"><div class="flex items-center justify-between"><h4 class="font-medium text-lg">Press Room</h4><span class="group-hover:translate-x-1 transition">→</span></div><p class="text-sm text-gray-600 dark:text-neutral-300 mt-2">News, media assets, and releases.</p></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid lg:grid-cols-4 gap-8">
+          <div>
+            <h5 class="font-serif text-xl">Stars Hotel</h5>
+            <p class="mt-2 text-sm text-gray-600 dark:text-neutral-300">Best Rate Guarantee. Legendary service since 1897.</p>
+          </div>
+          <div>
+            <h6 class="font-medium mb-3">Quick Links</h6>
+            <ul class="space-y-2 text-sm">
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#hotels">Hotels</a></li>
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#careers">Careers</a></li>
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#contact">Contact</a></li>
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#shop">Shop Stars Hotel</a></li>
+            </ul>
+          </div>
+          <div>
+            <h6 class="font-medium mb-3">Legal</h6>
+            <ul class="space-y-2 text-sm">
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#privacy">Privacy Policy</a></li>
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#cookies">Cookies</a></li>
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#terms">Terms & Conditions</a></li>
+              <li><a class="hover:text-brand-700 dark:hover:text-brand-300" href="#sitemap">Sitemap</a></li>
+            </ul>
+          </div>
+          <div>
+            <h6 class="font-medium mb-3">Newsletter</h6>
+            <form id="newsletterForm" class="flex gap-2">
+              <input type="email" id="newsletterEmail" placeholder="Your email" class="flex-1 rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500 px-3 py-2" />
+              <button class="rounded-lg bg-brand-600 text-white px-4 py-2 hover:bg-brand-700">Join</button>
+            </form>
+            <p id="newsletterMsg" class="mt-2 text-sm text-gray-600 dark:text-neutral-300"></p>
+            <div class="mt-4 flex gap-3 text-xl">
+              <a href="#" aria-label="Instagram" class="hover:text-brand-700 dark:hover:text-brand-300">📸</a>
+              <a href="#" aria-label="Facebook" class="hover:text-brand-700 dark:hover:text-brand-300">📘</a>
+              <a href="#" aria-label="LinkedIn" class="hover:text-brand-700 dark:hover:text-brand-300">💼</a>
+            </div>
+          </div>
+        </div>
+        <div class="mt-10 text-xs text-gray-500 dark:text-neutral-400">© 2025 Stars Hotel (Demo Template). For learning purposes only.</div>
+      </div>
+
+      <!-- Back-to-top -->
+      <button id="toTop" class="fixed bottom-6 right-6 hidden rounded-full bg-brand-600 text-white h-12 w-12 shadow-soft hover:bg-brand-700" aria-label="Back to top">↑</button>
+    </footer>
+
+    <!-- LIGHTBOX + UPSELL MODALS -->
+    <div id="lightbox" class="fixed inset-0 hidden items-center justify-center bg-black/70 p-6 z-50">
+      <figure class="max-w-4xl w-full">
+        <img id="lightboxImg" src="" alt="Expanded gallery image" class="w-full h-auto rounded-2xl shadow-soft" />
+        <figcaption id="lightboxCaption" class="sr-only">Gallery image</figcaption>
+      </figure>
+      <button id="lightboxClose" class="absolute top-6 right-6 text-white text-2xl" aria-label="Close image">✕</button>
+    </div>
+
+    <div id="upsell" class="fixed inset-0 hidden items-center justify-center bg-black/60 p-6 z-50">
+      <div class="w-full max-w-lg rounded-2xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 p-6 shadow-soft">
+        <header class="flex items-start justify-between">
+          <div>
+            <h4 class="font-serif text-xl">Enhance Your Stay</h4>
+            <p id="upsellContext" class="text-sm text-gray-600 dark:text-neutral-300">Recommended add‑ons for your selection.</p>
+          </div>
+          <button id="upsellClose" class="rounded-lg px-3 py-1 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Close">✕</button>
+        </header>
+        <form id="upsellForm" class="mt-4 grid gap-4">
+          <label class="flex items-start gap-3"><input type="checkbox" name="breakfast" class="mt-1" /><span><span class="font-medium">Breakfast Package</span><span class="block text-sm text-gray-600 dark:text-neutral-300">Daily breakfast for 2 • +IDR 300,000 / night</span></span></label>
+          <label class="flex items-start gap-3"><input type="checkbox" name="upgrade" class="mt-1" /><span><span class="font-medium">Room Upgrade</span><span class="block text-sm text-gray-600 dark:text-neutral-300">Upgrade to next category (subject to availability)</span></span></label>
+          <label class="flex items-start gap-3"><input type="checkbox" name="lateCheckout" class="mt-1" /><span><span class="font-medium">Late Check‑out</span><span class="block text-sm text-gray-600 dark:text-neutral-300">Until 4 PM (on request)</span></span></label>
+          <div class="flex items-center justify-end gap-3 pt-3">
+            <button type="button" id="upsellCancel" class="rounded-lg px-4 py-2 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800">No Thanks</button>
+            <button type="submit" class="rounded-lg px-4 py-2 bg-brand-600 text-white hover:bg-brand-700">Add & Continue</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- JS (placeholders for your main.js hooks) -->
+    <script>
+      // Theme toggle
+      const themeBtn = document.getElementById('themeToggle');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+          document.documentElement.classList.toggle('dark');
+        });
+      }
+
+      // Mobile menu
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      if (mobileBtn && mobileNav) {
+        mobileBtn.addEventListener('click', () => mobileNav.classList.toggle('hidden'));
+      }
+
+      // Back to top
+      const toTop = document.getElementById('toTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 600) toTop.classList.remove('hidden'); else toTop.classList.add('hidden');
+      });
+      toTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      // Hero quick form toggle
+      const toggleFormBtn = document.getElementById('toggleFormBtn');
+      const bookingCard = document.getElementById('bookingCard');
+      toggleFormBtn?.addEventListener('click', () => bookingCard?.classList.toggle('hidden'));
+
+      // Lightbox (simple)
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+      document.querySelectorAll('[data-lightbox]')?.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const src = btn.getAttribute('data-large');
+          lightboxImg.src = src || '';
+          lightbox.classList.remove('hidden');
+        });
+      });
+      lightboxClose?.addEventListener('click', () => lightbox.classList.add('hidden'));
+
+      // Upsell (open from buttons with data-upsell)
+      const upsell = document.getElementById('upsell');
+      const upsellClose = document.getElementById('upsellClose');
+      const upsellCancel = document.getElementById('upsellCancel');
+      const upsellContext = document.getElementById('upsellContext');
+      document.querySelectorAll('[data-upsell]')?.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const src = e.currentTarget;
+          const room = src.getAttribute('data-room');
+          const offer = src.getAttribute('data-offer');
+          upsellContext.textContent = room ? `Extras for ${room}` : (offer ? `Extras for ${offer}` : 'Recommended add-ons for your selection.');
+          upsell.classList.remove('hidden');
+        });
+      });
+      [upsellClose, upsellCancel].forEach(el => el?.addEventListener('click', () => upsell.classList.add('hidden')));
+
+      // Newsletter mock
+      const newsletterForm = document.getElementById('newsletterForm');
+      const newsletterEmail = document.getElementById('newsletterEmail');
+      const newsletterMsg = document.getElementById('newsletterMsg');
+      newsletterForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const value = newsletterEmail?.value?.trim();
+        if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          newsletterMsg.textContent = 'Please enter a valid email address.';
+          return;
+        }
+        newsletterMsg.textContent = 'Thanks for joining our newsletter!';
+        newsletterEmail.value = '';
+      });
+    </script>
+
+    <!-- External JS hook (optional) -->
+    <script src="main.js"></script>
+  </body>
+</html>
